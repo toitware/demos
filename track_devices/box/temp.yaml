@@ -1,0 +1,5 @@
+name: temp
+entrypoint: temp.toit
+triggers:
+  on_install: true
+  on_interval: 7m

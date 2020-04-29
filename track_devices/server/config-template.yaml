@@ -1,0 +1,16 @@
+mysql:
+  host: localhost
+  user: root
+  password: Test1234
+  database: track_devices
+  port: 1234
+
+toit:
+  username: jesper+first8-app@toitware.com
+  password: EBFGysbvL7LJQQVN
+  data_topic_subscription: track_devices
+
+web:
+  port: 8081
+  serve_path: ./web
+  path: /track-devices

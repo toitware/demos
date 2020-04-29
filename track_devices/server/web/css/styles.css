@@ -1,0 +1,295 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  padding: 0;
+  margin: 0;
+  background: #FAFAFA;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+
+/** GLOBALS ***/
+h2 {
+  margin-bottom:5px;
+}
+
+p {
+  margin:5px 0;
+}
+
+button {
+  background: #3184a1;
+  border: none;
+  color: white;
+  padding: 6px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+}
+
+.checkbox {
+  display: block;
+  width:100%;
+  margin:2px 0 0;
+  padding:5px 0 3px;
+  font-size:80%;
+  cursor:pointer;
+  font-weight: bold;
+  line-height: 1;
+  color:#3184a1;
+  background:#fff;
+  text-align: center;
+  border-radius: 2px;
+  border:1px solid #3184a1;
+}
+
+.checkbox.active {
+  background:#3184a1;
+  color:#fff;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.label {
+  display: inline;
+  padding: 2px 6px 3px;
+  font-size:80%;
+  font-weight: bold;
+  line-height: 1;
+  color:white;
+  background:#3184a1;
+  text-align: center;
+  border-radius: 2px;
+  vertical-align: baseline;
+  white-space: nowrap;
+}
+
+/** VIEWPORT **/
+.viewport {
+  width:100%;
+  height:100%;
+  display: block;
+  position: fixed;
+  overflow: hidden;
+  left:0;
+  top:0;
+}
+
+/** HEADER **/
+.header {
+  width: 100%;
+  height: 60px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  background: #333;
+  color: #FFF;
+  padding: 10px 16px;
+  overflow: hidden;
+  position: relative;
+  z-index:1;
+}
+
+.header-controls {
+  float:left;
+  clear:left;
+}
+
+.header header {
+  font-weight:bold;
+  font-size: 30px;
+  text-transform: uppercase;
+}
+
+/** MAIN **/
+#main {
+  top:60px;
+  bottom:0px;
+  left:0px;
+  right:0px;
+  position: absolute;
+  overflow: hidden;
+}
+
+#main .loader {
+  position: absolute;
+  right:20px;
+  bottom:20px;
+}
+
+/** MAP **/
+#map {
+  width:100%;
+  height:100%;
+}
+
+#main.show-device #map {
+  height:55%
+}
+
+/**** DEVICE VIEW ***/
+#device-view {
+  width:100%;
+  height:0%;
+  display:block;
+  position:absolute;
+  bottom:0;
+}
+
+#device-view #device-container {
+  float: left;
+  clear: left;
+  width: 100%;
+  height:100%;
+  overflow:scroll;
+}
+
+#device-view .header-controls {
+  float:right;
+  clear:right;
+}
+
+#device-view .column {
+  width:50%;
+  padding:0 1em;
+  float:left;
+}
+
+#device-view table {
+  width:100%;
+  background: #333;
+  color:white;
+}
+
+#device-view table tr {
+  height: 35px;
+}
+
+#device-view table th,
+#device-view table td {
+  text-align:left;
+  padding:0.5vh 0.5vw 0.5vh 0.5vw;
+  border-bottom:1px solid white;
+}
+
+#device-view table .right,
+.right {
+  text-align: right;
+}
+
+#main.show-device #device-view {
+  height:45%;
+}
+
+#main.animate #device-view,
+#main.animate #map {
+  transition: height 0.3s cubic-bezier(0,0,0.3,1);
+}
+
+/**** SIDE NAV ***/
+.side-nav {
+  position: fixed;
+  top: 0;
+  left:0;
+  width: 300px;
+  height: 100%;
+  z-index:1;
+  transform:translateX(-102%);
+}
+
+.viewport .side-nav-hide,
+.viewport.side-nav-visible .side-nav-show {
+  display: none;
+}
+
+.viewport .side-nav-show,
+.viewport.side-nav-visible .side-nav-hide {
+  display: block;
+}
+
+.viewport.side-nav-animate,
+.side-nav.animate {
+  transition: transform 0.13s cubic-bezier(0,0,0.3,1);
+}
+
+.viewport.side-nav-visible.side-nav-animate,
+.side-nav.visible.animate {
+  transition: transform 0.33s cubic-bezier(0,0,0.3,1);
+}
+
+.viewport.side-nav-visible {
+  transform: translateX(300px);
+}
+
+.side-nav.visible {
+  transform: none;
+}
+
+.side-nav-container {
+  position: relative;
+  width: 100%;
+  background: #FFF;
+  height: 100%;
+  box-shadow: 2px 0 12px rgba(0,0,0,0.4);
+  overflow: hidden;
+}
+
+.side-nav-header {
+  background:#3184a1;
+  height:50px;
+}
+
+.side-nav-header header {
+  font-size:20px;
+}
+
+.side-nav-container {
+  height:100%;
+  width:100%;
+  overflow-y:auto;
+  overflow-x:hidden;
+}
+
+/** SELECTOR **/
+
+.selector {
+  width:100%;
+}
+
+.selector ul {
+  list-style:none;
+  margin:0;
+  padding:10px;
+  font-size:20px;
+  line-height:1;
+}
+
+.selector ul li {
+  padding:2px 0;
+  margin:0;
+  text-align: center;
+}
+
+/** LOADER **/
+.loader {
+    border:10px solid #e8e8e8;
+    border-top:10px solid #3184a1;
+    border-bottom:10px solid #3184a1;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display:none;
+    animation: spin 2s linear infinite;
+}
+
+.loader.active {
+  display:block;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

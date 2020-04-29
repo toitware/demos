@@ -1,0 +1,5 @@
+name: display
+entrypoint: display.toit
+triggers:
+  on_install: true
+  on_interval: 13m

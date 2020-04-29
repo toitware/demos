@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="author" content="Toitware ApS" />
+  <meta name="viewport" content="width=device-width,minimum-scale=1">
+  <meta name="theme-color" content="#EA2663">
+  <title>Track your devices</title>
+  <link href="./css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+  <aside class="side-nav">
+    <nav class="side-nav-container">
+      <div class="header side-nav-header">
+        <header class="text-center">
+          Find device
+        </header>
+      </div>
+      <div class="side-nav-content">
+        <div class="selector">
+        </div>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="viewport">
+    <div class="header">
+      <div class="header-controls">
+        <button class="side-nav-show">&#9776;</button>
+        <button class="side-nav-hide">&times;</button>
+      </div>
+      <header class="text-center">Track your devices</header>
+    </div>
+    <div id="main">
+      <div id="map"></div>
+      <div class="loader"></div>
+      <div id="device-view">
+        <div class="header">
+          <div class="header-controls">
+            <button class="device-view-hide">&times;</button>
+          </div>
+          <header class="text-center">Device info: <span class="device-info-id"></span></header>
+        </div>
+        <div id="device-container">
+          <div class="device-locations-container column">
+            <h3>Locations</h3>
+            <table class="device-locations">
+            </table>
+          </div>
+
+          <div class="device-thps-container column">
+            <h3>Temperature, Humidity and Pressure</h3>
+            <table class="device-thps">
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  <script src="./js/SimpleSet.js"></script>
+  <script src="./js/eventStaller.js"></script>
+  <script src="./js/AjaxRequest.js"></script>
+  <script src='./js/SideNav.js'></script>
+  <script src='./js/Selector.js'></script>
+  <script src='./js/DeviceView.js'></script>
+  <script src="./js/app.js"></script>
+  <script>
+    var myTrackDevicesApp = new TrackDevices();
+  </script>
+  <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_QXSDHYr8lACilhfUQEXIPFGPqzPKN5A&callback=myTrackDevicesApp.onMapLoaded"></script>
+
+</body>
+</html>
