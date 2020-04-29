@@ -1,7 +1,7 @@
 # Copyright (C) 2020 Toitware ApS. All rights reserved.
 
 install:
-	pip install -r requirements.txt
+	pip install -r server/requirements.txt
 
 TOIT_API_PATH := ../third_party/toit_api/proto
 PROTO_OUT_PATH := server
