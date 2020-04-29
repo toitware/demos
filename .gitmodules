@@ -1,0 +1,3 @@
+[submodule "third_party/toit_api"]
+	path = third_party/toit_api
+	url = https://github.com/toitware/api.git
