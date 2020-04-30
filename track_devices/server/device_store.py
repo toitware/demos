@@ -5,6 +5,7 @@ import pymysql as mysql
 
 def create_device_store(config):
     conn = mysql.connect(host=config['mysql']['host'],port=config['mysql']['port'],user=config['mysql']['user'],password=config['mysql']['password'],database=config['mysql']['database'],autocommit=True)
+    conn.ping(reconnect=True)
     return DeviceStore(conn)
 
 class DeviceStore:
