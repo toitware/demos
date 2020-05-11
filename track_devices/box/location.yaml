@@ -1,5 +1,6 @@
 name: location
 entrypoint: location.toit
 triggers:
-  on_install: true
-  on_interval: 31m
+  on_interval: 12h
+  on_movement:
+    shaken: true
