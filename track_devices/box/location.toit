@@ -47,17 +47,18 @@ track_movement gps/GPS:
   has_fix := false
   while (Time.now - start) < (Duration --minutes=20):
     location := gps.read
+    if not location:
+      sleep --ms=1000
+      continue
+    spent ::= Time.now - start
     if not has_fix:
-      spent ::= Time.now - start
       log "[location] first fix took $spent: $location"
       has_fix = true
-    // TODO(kasper): Maybe only push new locations if they have changed?
-    if location:
-      log "[location] updated fix after $(Time.now - start): $location"
-      push_location location
-      sleep --ms=60_000
     else:
-      sleep --ms=1000
+      log "[location] updated fix after $spent: $location"
+    // TODO(kasper): Maybe only push new locations if they have changed?
+    push_location location
+    sleep --ms=60_000
 
 push_location location/GnssLocation:
   // TODO(kasper): We turn the GnssLocation into a plain old Location
