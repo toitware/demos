@@ -11,7 +11,7 @@ import peripherals show GPS
 main:
   trigger ::= job.trigger
   moved ::= trigger is job.MovementTrigger
-  reason ::= moved ? "because of movement" : " as scheduled"
+  reason ::= moved ? "because of movement" : "as scheduled"
 
   log "[location] started $reason"
   gps := GPS.start
@@ -32,14 +32,14 @@ get_stationary_fix gps/GPS:
 
   if location:
     spent ::= Time.now - start
-    log "[location] first fix took $spent: $location"
+    log "[location] first fix took $spent: $(format_location location)"
 
     // Keep improving the GPS fix for a little while longer, up to
     // two minutes in total, but at least 20 seconds.
     left ::= (Duration --minutes=3) - spent
     sleep (max (Duration --seconds=20) left)
     location = gps.read
-    log "[location] improved fix took $(Time.now - start): $location"
+    log "[location] improved fix took $(Time.now - start): $(format_location location)"
     push_location location
 
 track_movement gps/GPS:
@@ -52,13 +52,16 @@ track_movement gps/GPS:
       continue
     spent ::= Time.now - start
     if not has_fix:
-      log "[location] first fix took $spent: $location"
+      log "[location] first fix took $spent: $(format_location location)"
       has_fix = true
     else:
-      log "[location] updated fix after $spent: $location"
+      log "[location] updated fix after $spent: $(format_location location)"
     // TODO(kasper): Maybe only push new locations if they have changed?
     push_location location
     sleep --ms=60_000
+
+format_location location/GnssLocation -> string:
+  return "$location (±$(%.1f location.horizontal_accuracy)m)"
 
 push_location location/GnssLocation:
   // TODO(kasper): We turn the GnssLocation into a plain old Location
