@@ -5,7 +5,6 @@ import pymysql as mysql
 
 def create_device_store(config):
     conn = mysql.connect(host=config['mysql']['host'],port=config['mysql']['port'],user=config['mysql']['user'],password=config['mysql']['password'],database=config['mysql']['database'],autocommit=True)
-    conn.ping(reconnect=True)
     return DeviceStore(conn)
 
 class DeviceStore:
@@ -18,6 +17,7 @@ class DeviceStore:
 
     def write_location(self, device_id, created_at, loc):
         cursor = self.conn.cursor()
+        self.conn.ping()
         try:
             self.register_device(cursor, device_id)
             cursor.execute("INSERT INTO `device_locations` (`device_id`,`location`,`created_at`) VALUES(%s,POINT(%s,%s),%s)", [device_id.bytes, loc.lat, loc.lon, created_at])
@@ -27,6 +27,7 @@ class DeviceStore:
 
     def write_thp(self, device_id, created_at, t, h, p):
         cursor = self.conn.cursor()
+        self.conn.ping()
         try:
             self.register_device(cursor, device_id)
             cursor.execute("INSERT INTO `device_thps` (`device_id`,`temperature`, `pressure`,`humidity`,`created_at`) VALUES(%s,%s,%s,%s,%s)", [device_id.bytes, t, p, h, created_at])
@@ -37,6 +38,7 @@ class DeviceStore:
 
     def delete_device(self, device_id):
         cursor = self.conn.cursor()
+        self.conn.ping()
         try:
             self.register_device(cursor, device_id)
             cursor.execute("DELETE FROM `device_locations` WHERE device_id = %s", [device_id.bytes])
@@ -59,6 +61,7 @@ class DeviceStore:
         ORDER BY `device_thps`.`created_at` DESC
         """
         cursor = self.conn.cursor()
+        self.conn.ping()
         cursor.execute(query, [device_id.bytes])
         rows = cursor.fetchall()
 
@@ -79,6 +82,7 @@ class DeviceStore:
         ORDER BY `device_locations`.`created_at` DESC
         """
         cursor = self.conn.cursor()
+        self.conn.ping()
         cursor.execute(query, [device_id.bytes])
         rows = cursor.fetchall()
 
@@ -99,6 +103,7 @@ class DeviceStore:
         """
 
         cursor = self.conn.cursor()
+        self.conn.ping()
         cursor.execute(query, [device_id.bytes])
         r = cursor.fetchone()
 
@@ -152,6 +157,7 @@ class DeviceStore:
 
     # TODO: Filter on location bounds
         cursor = self.conn.cursor()
+        self.conn.ping()
         cursor.execute(query)
         rows = cursor.fetchall()
 
