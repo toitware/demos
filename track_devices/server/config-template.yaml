@@ -1,14 +1,14 @@
 mysql:
-  host: localhost
-  user: root
-  password: Test1234
-  database: track_devices
-  port: 1234
+  host: <mysql-host>
+  user: <mysql-user>
+  password: <mysql-password>
+  database: <mysql-db>
+  port: <mysql-port>
 
 toit:
-  username: jesper+first8-app@toitware.com
-  password: EBFGysbvL7LJQQVN
-  data_topic_subscription: track_devices
+  username: <toit-username>
+  password: <toit-password>
+  data_topic_subscription: <toit-subscription-name>
 
 web:
   port: 8081

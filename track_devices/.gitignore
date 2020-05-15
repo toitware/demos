@@ -3,4 +3,5 @@ __pycache__
 server/toit
 prod.yaml
 config.yaml
+local.yaml
 *.pyc
