@@ -115,7 +115,7 @@ class DeviceStore:
         params = []
         if device_id != None:
             query += " WHERE `device_alerts`.`device_id` = %s"
-            params.append(device_id)
+            params.append(device_id.bytes)
 
         query += " ORDER BY `device_alerts`.`created_at` DESC"
         cursor = self.conn.cursor()
