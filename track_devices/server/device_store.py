@@ -106,8 +106,8 @@ class DeviceStore:
         SELECT
             `device_alerts`.`message`,
             `device_alerts`.`resolved`,
-            `device_alerts`.`device_id`,
-            `device_alerts`.`created_at`,
+            hex(`device_alerts`.`device_id`),
+            `device_alerts`.`created_at`
         FROM
             `device_alerts`
         """
@@ -157,6 +157,7 @@ class DeviceStore:
                 r[2],
                 self.list_locations(device_id),
                 self.list_thps(device_id),
+                self.list_alerts(device_id),
             )
         finally:
             cursor.close()
@@ -284,7 +285,7 @@ class Alert:
         return {
             "message": self.message,
             "resolved": self.resolved,
-            "device_id": self.device_id,
+            "device_id": str(self.device_id),
             "created_at": self.created_at.isoformat("T") if self.created_at else None,
         }
 

@@ -105,6 +105,7 @@ def persist_message(store, msg):
         print("Failed to parse message", e, "message", msg)
         return
 
+    print("got message: ", topic_data.topic)
     if topic_data.topic == "track_devices.location":
         persist_location(store, device_id, created_at, topic_data.data)
     elif topic_data.topic == "track_devices.thp":

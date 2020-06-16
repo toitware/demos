@@ -43,6 +43,17 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self.wfile.flush()
         return None
 
+    def list_alerts(self):
+        alerts = self.store.list_alerts()
+        res = json.dumps([alert.map() for alert in alerts])
+        self.send_response(HTTPStatus.OK)
+        self.send_header("Content-type", "application/json")
+        self.send_header("Content-Length", len(res))
+        self.end_headers()
+        self.wfile.write(str.encode(res))
+        self.wfile.flush()
+        return None
+
     def delete_device(self, device_id):
         id = uuid.UUID(device_id)
         self.store.delete_device(id)
@@ -75,6 +86,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         if url.path == "/api/devices":
             print("requested list of devices")
             self.list_devices()
+        elif url.path == "/api/alerts":
+            print("requested list of alerts")
+            self.list_alerts()
         elif url.path.startswith("/api/devices/"):
             device = self.path[len("/api/devices/"):]
             print("requested single device", device)
