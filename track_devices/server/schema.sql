@@ -26,3 +26,14 @@ CREATE TABLE IF NOT EXISTS device_thps (
     PRIMARY KEY(`id`),
     INDEX dev_loc_idx (`device_id`, `created_at`)
 );
+
+
+CREATE TABLE IF NOT EXISTS device_alerts (
+    `id` MEDIUMINT NOT NULL AUTO_INCREMENT,
+    `device_id` binary(16) NOT NULL,
+    `message` varchar(512) NOT NULL,
+    `resolved` tinyint(1) NOT NULL,
+    `created_at` DATETIME(6) NOT NULL,
+    PRIMARY KEY(`id`),
+    INDEX dev_loc_idx (`device_id`, `created_at`)
+);

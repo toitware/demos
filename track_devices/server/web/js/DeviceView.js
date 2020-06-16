@@ -37,9 +37,9 @@ DeviceView.prototype._showDeviceInfo = function(device) {
   }).join("")
   this.deviceLocationTable.innerHTML = locationHeader + locationBody
 
-  var thpHeader = '<tr class="header"><th>Temperature</th><th>Humidity</th><th>Pressure</th><th class="right">Created At</th></tr>'
+  var thpHeader = '<tr class="header"><th>Temperature</th><th>Humidity</th><th>Pressure (hPa)</th><th class="right">Created At</th></tr>'
   thpBody = device.thps.map(function(thp)  {
-    return '<tr class="data"><td>'+thp.temperature+'</td><td>'+thp.humidity+'</td><td>'+thp.pressure+'</td><td class="right">'+thp.created_at+'</td></tr>'
+    return '<tr class="data"><td>'+thp.temperature+'</td><td>'+thp.humidity+'</td><td>'+(thp.pressure / 100)+'</td><td class="right">'+thp.created_at+'</td></tr>'
   }).join("")
   this.deviceTHPTable.innerHTML = thpHeader + thpBody
 }
