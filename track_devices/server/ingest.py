@@ -80,6 +80,17 @@ def persist_thp(store, device_id, created_at, data):
 
     store.write_thp(device_id, created_at, thp['t'],thp['h'],thp['p'])
 
+def is_alert(alert):
+    return isinstance(alert['message'], str)
+
+def persist_alert(store, device_id, created_at, data):
+    alert = ubjson.loadb(data)
+    if not is_alert(alert):
+        print("received invalid alert", alert)
+        return
+
+    store.write_alert(device_id, created_at, alert["message"], 0)
+
 def persist_message(store, msg):
     if msg.type != data_pb2.TOPIC_DATA:
         return
@@ -98,6 +109,8 @@ def persist_message(store, msg):
         persist_location(store, device_id, created_at, topic_data.data)
     elif topic_data.topic == "track_devices.thp":
         persist_thp(store, device_id, created_at, topic_data.data)
+    elif topic_data.topic == "track_devices.alert":
+        persist_alert(store, device_id, created_at, topic_data.data)
     else:
         print("Ignoring message ontopic:", topic_data.topic)
 

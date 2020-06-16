@@ -35,6 +35,15 @@ class DeviceStore:
         finally:
             cursor.close()
 
+    def write_alert(self, device_id, created_at, message, resolved):
+        cursor = self.conn.cursor()
+        self.conn.ping()
+        try:
+            self.register_device(cursor, device_id)
+            cursor.execute("INSERT INTO `device_alerts` (`device_id`,`message`,`resolved`,`created_at`) VALUES(%s,%s,%s,%s)", [device_id.bytes, message, 1 if resolved else 0, created_at])
+            self.conn.commit()
+        finally:
+            cursor.close()
 
     def delete_device(self, device_id):
         cursor = self.conn.cursor()
@@ -43,6 +52,7 @@ class DeviceStore:
             self.register_device(cursor, device_id)
             cursor.execute("DELETE FROM `device_locations` WHERE device_id = %s", [device_id.bytes])
             cursor.execute("DELETE FROM `device_thps` WHERE device_id = %s", [device_id.bytes])
+            cursor.execute("DELETE FROM `device_alerts` WHERE device_id = %s", [device_id.bytes])
             cursor.execute("DELETE FROM `devices` WHERE id = %s", [device_id.bytes])
             self.conn.commit()
         finally:
@@ -52,8 +62,8 @@ class DeviceStore:
         query = """
         SELECT
             `device_thps`.`temperature`,
-            `device_thps`.`pressure`,
             `device_thps`.`humidity`,
+            `device_thps`.`pressure`,
             `device_thps`.`created_at` as `thp_created_at`
         FROM
             `device_thps`
@@ -91,6 +101,39 @@ class DeviceStore:
         finally:
             cursor.close()
 
+    def list_alerts(self, device_id=None):
+        query = """
+        SELECT
+            `device_alerts`.`message`,
+            `device_alerts`.`resolved`,
+            hex(`device_alerts`.`device_id`),
+            `device_alerts`.`created_at`
+        FROM
+            `device_alerts`
+        """
+
+        params = []
+        if device_id != None:
+            query += " WHERE `device_alerts`.`device_id` = %s"
+            params.append(device_id)
+
+        query += " ORDER BY `device_alerts`.`created_at` DESC"
+        cursor = self.conn.cursor()
+        self.conn.ping()
+        cursor.execute(query, params)
+        rows = cursor.fetchall()
+
+        try:
+            return [Alert(r[0], r[1], uuid.UUID(hex=r[2]), r[3]) for r in rows]
+        finally:
+            cursor.close()
+
+
+        cursor = self.conn.cursor()
+        self.conn.ping()
+        cursor.execute(query, [device_id.bytes])
+        r = cursor.fetchone()
+
     def get_device(self, device_id):
         query = """
         SELECT
@@ -114,6 +157,7 @@ class DeviceStore:
                 r[2],
                 self.list_locations(device_id),
                 self.list_thps(device_id),
+                self.list_alerts(device_id),
             )
         finally:
             cursor.close()
@@ -128,9 +172,12 @@ class DeviceStore:
             ST_Y(`device_locations`.`location`) as `lon`,
             `device_locations`.`created_at` as `loc_created_at`,
             `device_thps`.`temperature`,
-            `device_thps`.`pressure`,
             `device_thps`.`humidity`,
-            `device_thps`.`created_at` as `thp_created_at`
+            `device_thps`.`pressure`,
+            `device_thps`.`created_at` as `thp_created_at`,
+            `device_alerts`.`message`,
+            `device_alerts`.`resolved`,
+            `device_alerts`.`created_at` as `alert_created_at`
         FROM
             `devices`
         LEFT OUTER JOIN
@@ -151,6 +198,15 @@ class DeviceStore:
                 FROM `device_thps`
                 WHERE `device_locations`.`device_id` = `devices`.`id`
             )
+        LEFT OUTER JOIN
+            `device_alerts`
+        ON
+            `devices`.`id` = `device_alerts`.`device_id` AND
+            `device_alerts`.`created_at` = (
+                SELECT MAX(`created_at`)
+                FROM `device_alerts`
+                WHERE `device_alerts`.`device_id` = `devices`.`id`
+            )
         ORDER BY
             `devices`.`id`
         """
@@ -168,6 +224,7 @@ class DeviceStore:
                 r[2],
                 Location(r[3],r[4],r[5]) if r[3] else None,
                 THP(r[6],r[7],r[8],r[9]) if r[6] else None,
+                Alert(r[10],r[11],uuid.UUID(hex=r[0]),r[12]) if r[10] else None,
             ) for r in rows]
         finally:
             cursor.close()
@@ -212,17 +269,38 @@ class THP:
             "created_at": self.created_at.isoformat("T") if self.created_at else None,
         }
 
+class Alert:
+    message = ""
+    device_id = None
+    resolved = 0
+    created_at = None
+
+    def __init__(self, message,resolved, device_id, created_at=None):
+        self.message = message
+        self.resolved = resolved
+        self.device_id = device_id
+        self.created_at = created_at
+
+    def map(self):
+        return {
+            "message": self.message,
+            "resolved": self.resolved,
+            "device_id": str(self.device_id),
+            "created_at": self.created_at.isoformat("T") if self.created_at else None,
+        }
+
 class Device:
     id=None
     created_at=None
     name=""
 
-    def __init__(self, id, created_at, name, locations=None, thps=None):
+    def __init__(self, id, created_at, name, locations=None, thps=None, alerts=None):
         self.id = id
         self.created_at = created_at
         self.name = name
         self.locations = locations
         self.thps = thps
+        self.alerts = alerts
 
     def map(self):
         res = {
@@ -240,4 +318,9 @@ class Device:
             res["thps"] = [thp.map() for thp in self.thps]
         else:
             res["thp"] = self.thps.map() if self.thps else None
+
+        if type(self.alerts) is list:
+            res["alerts"] = [alert.map() for alert in self.alerts]
+        else:
+            res["alert"] = self.alerts.map() if self.alerts else None
         return res
