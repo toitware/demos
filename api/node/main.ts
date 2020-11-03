@@ -5,7 +5,7 @@ import { LoginRequest, AuthResponse } from "@toitware/api/src/toit/api/auth_pb"
 import { AuthClient } from "@toitware/api/src/toit/api/auth_grpc_pb"
 import { ListDevicesRequest, ListDevicesResponse, Device } from "@toitware/api/src/toit/api/device_pb"
 import { DeviceServiceClient } from "@toitware/api/src/toit/api/device_grpc_pb"
-import * as grpc from "grpc"
+import * as grpc from "@grpc/grpc-js"
 
 async function main() {
   if (process.argv.length != 4) {

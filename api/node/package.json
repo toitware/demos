@@ -13,10 +13,10 @@
   "author": "Toitware ApS",
   "license": "MIT",
   "dependencies": {
-    "@toitware/api": "^0.1.0",
+    "@grpc/grpc-js": "^1.1.8",
+    "@toitware/api": "^0.10.14",
     "@types/node": "^14.10.1",
-    "google-protobuf": "^3.13.0",
-    "grpc": "^1.24.3"
+    "google-protobuf": "^3.13.0"
   },
   "devDependencies": {
     "ts-node": "^9.0.0",
