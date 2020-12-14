@@ -92,8 +92,6 @@ def main():
 
     subscribeProcess = Subscribe(username=username, password=password, subscription=subscription)
     subscribeProcess.start()
-    # signal.signal(signal.SIGINT, original_sigint_handler)
-
 
     channel = setup_channel(username, password)
     try:
