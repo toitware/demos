@@ -5,4 +5,4 @@ Will list all devices in the an organization. first create you will need a API k
 To run use:
 ```
 $ go run ./main.go <api-key>
-``
+```
