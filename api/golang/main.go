@@ -18,28 +18,42 @@ func main() {
 		fmt.Println("must be called with a <api-key> as argument")
 		return
 	}
+
+	ctx := context.Background()
+
 	apiKey := os.Args[1]
 
-	conn, err := connect(apiKey)
+	conn, err := connect(ctx, apiKey)
 	if err != nil {
 		panic(err)
 	}
 	defer conn.Close()
 
+	devices, err := listDevices(ctx, conn)
+	if err != nil {
+		panic(err)
+	}
+
+	for _, device := range devices {
+		fmt.Println(device.GetConfig().GetName())
+	}
 }
 
-func listDevices(conn grpc.ClientConnInterface) ([]api.Device, error) {
+func listDevices(ctx context.Context, conn grpc.ClientConnInterface) ([]*api.Device, error) {
 	client := api.NewDeviceServiceClient(conn)
-	return nil, nil
-	// api.New
+	resp, err := client.ListDevices(ctx, &api.ListDevicesRequest{})
+	if err != nil {
+		return nil, err
+	}
+	return resp.GetDevices(), nil
 }
 
-func connect(apiKey string) (*grpc.ClientConn, error) {
+func connect(ctx context.Context, apiKey string) (*grpc.ClientConn, error) {
 	pool, err := x509.SystemCertPool()
 	if err != nil {
 		return nil, err
 	}
-	return grpc.Dial("api.toit.io",
+	return grpc.DialContext(ctx, "api.toit.io:443",
 		grpc.WithKeepaliveParams(keepalive.ClientParameters{
 			Time:    5 * time.Second,
 			Timeout: 2 * time.Second,
@@ -61,7 +75,7 @@ func newAPIRPCCredentials(apiKey string) *apiRPCCredentials {
 
 func (c *apiRPCCredentials) GetRequestMetadata(ctx context.Context, uri ...string) (map[string]string, error) {
 	return map[string]string{
-		"Authorization": c.apiKey,
+		"Authorization": "Bearer " + c.apiKey,
 	}, nil
 }
 
