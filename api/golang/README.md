@@ -1,8 +1,8 @@
-# Toitware API golang example
+# Toit API golang example
 
-Will list all devices in the an organization.
+Will list all devices in an organization.
 
-first will need a API key. Use `toit org api-keys` to create one.
+First, you will need an API key. Use the Toit CLI command `toit org api-keys` to create one.
 
 To run use:
 ```
