@@ -1,4 +1,4 @@
-# Toitware API java example
+# Toit API Java example
 
 Will list all devices in the user's organization.
 
