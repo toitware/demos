@@ -41,7 +41,7 @@ $ toit project api-keys list
 
 Note the ID of your API key.
 
-View the generated API key secret with the Toit CLI command:
+View the generated API key *secret* with the Toit CLI command:
 
 ```
 $ toit project api-keys print-secret <api-key-id>
@@ -57,4 +57,7 @@ $ ./main.py
 
 The script will prompt for the API key secret as input.
 
-And when authenticated, the script will print all available devices in the current project.
+When authenticated, the script will print all available devices in the current project.
+
+
+![animation](./list-devices.gif)
