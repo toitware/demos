@@ -1,6 +1,6 @@
 # Toit API Java example
 
-Will list all devices in the user's organization.
+Will list all devices available in the current project.
 
 To run use:
 ```
