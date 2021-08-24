@@ -16,4 +16,4 @@ Next install dependencies and run:
 ```
 $ pip install -r requirements.txt
 $ ./main.py <username> <password>
-``
+```
