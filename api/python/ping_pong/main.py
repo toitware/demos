@@ -26,14 +26,8 @@ def create_channel(access_token=None):
 def create_subscription(subscription):
     return subscribe_pb2.Subscription(name=subscription,topic=INCOMING_TOPIC)
 
-def setup_channel(username, password):
-  channel = create_channel()
-  try:
-      auth = auth_pb2_grpc.AuthStub(channel)
-      resp = auth.Login(auth_pb2.LoginRequest(username=username,password=password))
-      return create_channel(access_token=str(resp.access_token, 'utf-8'))
-  finally:
-      channel.close()
+def setup_channel(accessToken):
+    return create_channel(access_token=accessToken)
 
 def get_messages(channel, subscription):
     while True:
@@ -57,15 +51,14 @@ def publish_message(channel, msg):
     pub_stub.Publish(publish_pb2.PublishRequest(topic=OUTGOING_TOPIC,publisher_name=socket.gethostname(),data=[msg.encode("utf-8")]))
 
 class Subscribe(multiprocessing.Process):
-    def __init__(self, username, password, subscription):
+    def __init__(self, accessToken, subscription):
         multiprocessing.Process.__init__(self)
         self.exit = multiprocessing.Event()
-        self.username = username
-        self.password = password
+        self.accessToken = accessToken
         self.subscription = create_subscription(subscription)
 
     def run(self):
-        channel = setup_channel(self.username, self.password)
+        channel = setup_channel(self.accessToken)
         try:
             while True:
                 try:
@@ -74,7 +67,7 @@ class Subscribe(multiprocessing.Process):
                         ack_message(channel, self.subscription, msg)
                 except grpc.RpcError as rpc_error:
                     if rpc_error.code() == grpc.StatusCode.UNAUTHENTICATED:
-                        self.channel = setup_channel(self.username, self.password)
+                        self.channel = setup_channel(self.accessToken)
                     else:
                         raise rpc_error
         except KeyboardInterrupt:
@@ -83,17 +76,22 @@ class Subscribe(multiprocessing.Process):
             channel.close()
 
 def main():
-    username = sys.argv[1]
-    password = sys.argv[2]
-    subscription = sys.argv[3]
+    subscription = "test"
+    if sys.argv[1:]:
+        subscription = sys.argv[1]
+    else:
+        print("You must provide the subscription name as argument")
+        sys.exit()
+
+    accessToken = input("Enter API-key secret:")    
 
     original_sigint_handler = signal.signal(signal.SIGINT, signal.SIG_IGN)
     signal.signal(signal.SIGINT, original_sigint_handler)
 
-    subscribeProcess = Subscribe(username=username, password=password, subscription=subscription)
+    subscribeProcess = Subscribe(accessToken=accessToken, subscription=subscription)
     subscribeProcess.start()
 
-    channel = setup_channel(username, password)
+    channel = setup_channel(accessToken)
     try:
         print("Write a message to send:")
         while True:
