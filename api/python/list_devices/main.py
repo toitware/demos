@@ -5,6 +5,7 @@
 import grpc
 import os
 import sys
+import getpass
 from toit.api import auth_pb2_grpc, auth_pb2, device_pb2_grpc, device_pb2
 
 def create_channel(access_token=None):
@@ -15,23 +16,19 @@ def create_channel(access_token=None):
 
   return grpc.secure_channel("api.toit.io:443", credentials)
 
-def setup_channel(username, password):
-  channel = create_channel()
-  try:
-      auth = auth_pb2_grpc.AuthStub(channel)
-      resp = auth.Login(auth_pb2.LoginRequest(username=username,password=password))
-      return create_channel(access_token=str(resp.access_token, 'utf-8'))
-  finally:
-      channel.close()
+def setup_channel(accessToken):
+  return create_channel(access_token=accessToken)
 
 def list_devices(channel):
   device = device_pb2_grpc.DeviceServiceStub(channel)
   resp = device.ListDevices(device_pb2.ListDevicesRequest())
+  print("Listing available devices in current project:")
   for device in resp.devices:
       print(device.config.name)
 
 def main():
-    channel = setup_channel(sys.argv[1], sys.argv[2])
+    accessToken = getpass.getpass("Enter API-key secret:")
+    channel = setup_channel(accessToken)
     try:
       list_devices(channel)
     finally:
