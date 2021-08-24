@@ -85,5 +85,3 @@ While the python application is running in one terminal window, run the toit app
 ```
 $ toit run -d <your-device> pong.toit
 ```
-
-![ping pong](http://g.recordit.co/mtDjYTbFQk.gif)
