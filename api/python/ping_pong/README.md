@@ -36,7 +36,7 @@ $ toit pubsub subscription create cloud:demo/pong MyPubsubTopic
 
 ## Run
 
-Run the application with your toit username and password and the choosen subscription-name:
+Run the application with your toit username and password and the chosen subscription-name:
 
 ```
 $ ./main.py <username> <password> <subscription-name>
@@ -45,10 +45,10 @@ $ ./main.py <username> <password> <subscription-name>
 Example:
 
 ```
-$ ./main.py demo+test@toitware.com ******** MyPubsubTopic
+$ ./main.py demo+test@toit.io ******** MyPubsubTopic
 ```
 
-While the python application is running in one tap run the toit application in another:
+While the python application is running in one terminal window, run the toit application in another:
 
 ```
 $ toit run -d <your-device> pong.toit
