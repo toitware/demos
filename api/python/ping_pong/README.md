@@ -1,6 +1,7 @@
 # PubSub ping pong
 
-The application will send messages on the `cloud:demo/ping` and print all message received on `cloud:demo/pong`.
+The application will send messages on the topic `cloud:demo/ping` and print all message received on the topic `cloud:demo/pong`.
+
 Use the `pong.toit` program to send replies back.
 
 ## Installation
@@ -34,19 +35,50 @@ Example:
 $ toit pubsub subscription create cloud:demo/pong MyPubsubTopic
 ```
 
-## Run
+## API key
 
-Run the application with your toit username and password and the chosen subscription-name:
+Create a new API key for your Toit project, by executing the Toit CLI command:
 
 ```
-$ ./main.py <username> <password> <subscription-name>
+$ toit project api-keys add <name-of-key>
 ```
 
 Example:
 
 ```
-$ ./main.py demo+test@toit.io ******** MyPubsubTopic
+$ toit project api-keys add MyAPIKey
 ```
+
+View the list of API keys available in your project with the Toit CLI command:
+
+```
+$ toit project api-keys list
+```
+
+Note the ID of your API key.
+
+View the generated API key *secret* with the Toit CLI command:
+
+```
+$ toit project api-keys print-secret <api-key-id>
+```
+
+
+## Run
+
+Run the application with your the chosen subscription-name:
+
+```
+$ ./main.py <subscription-name>
+```
+
+Example:
+
+```
+$ ./main.py MyPubsubTopic
+```
+
+The program will prompt for the API key *secret* as input.
 
 While the python application is running in one terminal window, run the toit application in another:
 
