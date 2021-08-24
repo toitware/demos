@@ -85,3 +85,11 @@ While the python application is running in one terminal window, run the toit app
 ```
 $ toit run -d <your-device> pong.toit
 ```
+
+Example:
+
+```
+$ toit run -d MyESP32Device pong.toit
+```
+
+![animation](pingpong.gif)
