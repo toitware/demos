@@ -7,6 +7,7 @@ import multiprocessing
 import socket
 import os
 import sys
+import getpass
 import signal
 from toit.api import auth_pb2_grpc, auth_pb2
 from toit.api.pubsub import subscribe_pb2, subscribe_pb2_grpc, publish_pb2, publish_pb2_grpc
@@ -83,7 +84,7 @@ def main():
         print("You must provide the subscription name as argument")
         sys.exit()
 
-    accessToken = input("Enter API-key secret:")    
+    accessToken = getpass.getpass("Enter API-key secret:")
 
     original_sigint_handler = signal.signal(signal.SIGINT, signal.SIG_IGN)
     signal.signal(signal.SIGINT, original_sigint_handler)
