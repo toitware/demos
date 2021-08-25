@@ -47,6 +47,8 @@ View the generated API key *secret* with the Toit CLI command:
 $ toit project api-keys print-secret <api-key-id>
 ```
 
+Use the printed *secret* in the next step, when running the Python script.
+
 ## Run
 
 Run the Python script:
