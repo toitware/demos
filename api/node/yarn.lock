@@ -76,10 +76,10 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
 
-"@toitware/api@^0.10.14":
-  version "0.10.14"
-  resolved "https://registry.yarnpkg.com/@toitware/api/-/api-0.10.14.tgz#645b3ae56d4f8b4cc073e62fd01e8700685b7bb2"
-  integrity sha512-jr1XRuZEqfx6Wr3hkEjb4CQ15XSGu4CvGNXWthv/r6+Mhz0gHp6VlUlmTKSLas/dbJd0Uw1Vl/Yn70quXNBmvA==
+"@toit/api@^0.11.2":
+  version "0.11.2"
+  resolved "https://registry.yarnpkg.com/@toit/api/-/api-0.11.2.tgz#0cd73f8b133510defbdf2768bdbda437ce9a90b2"
+  integrity sha512-1iRGPjlLuVWikg6BZLwt4f2pcWHpTtxj+3/Ph3D685Sy3S2nWGzK+IB8Du0Yrfyzawy3Or2hKtmkvy1OabRdEQ==
   dependencies:
     "@grpc/grpc-js" "^1.1.8"
     "@types/node" "^14.10.1"

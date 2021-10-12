@@ -1,6 +1,6 @@
-# Toitware API node example
+# Toit API node example
 
-Will list all devices available in the current project.
+Lists all devices available in the current project.
 
 To run use:
 ```
