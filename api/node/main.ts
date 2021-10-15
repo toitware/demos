@@ -1,26 +1,26 @@
-
 // Copyright (C) 2020 Toitware ApS. All rights reserved.
 
-import { LoginRequest, AuthResponse } from "@toitware/api/src/toit/api/auth_pb"
-import { AuthClient } from "@toitware/api/src/toit/api/auth_grpc_pb"
-import { ListDevicesRequest, ListDevicesResponse, Device } from "@toitware/api/src/toit/api/device_pb"
-import { DeviceServiceClient } from "@toitware/api/src/toit/api/device_grpc_pb"
 import * as grpc from "@grpc/grpc-js"
+import { AuthClient } from "@toit/api/src/toit/api/auth_grpc_pb"
+import { AuthResponse, LoginRequest } from "@toit/api/src/toit/api/auth_pb"
+import { DeviceServiceClient } from "@toit/api/src/toit/api/device_grpc_pb"
+import { Device, ListDevicesRequest, ListDevicesResponse } from "@toit/api/src/toit/api/device_pb"
 
 async function main() {
   if (process.argv.length != 4) {
-    console.error("must be called with toitware <username> and <password> as arguments");
+    console.error("must be called with <username> and <password> as arguments");
     return;
   }
 
   const credentials = grpc.credentials.createSsl();
   const auth = await login(credentials, process.argv[2], process.argv[3]);
+  const token = Buffer.from(auth.getAccessToken_asU8()).toString("utf8");
 
   const channel = new grpc.Channel("api.toit.io",
     grpc.credentials.combineChannelCredentials(credentials,
       grpc.credentials.createFromMetadataGenerator((_, cb) => {
         const md = new grpc.Metadata();
-        md.set("Authorization", "Bearer " + new Buffer(auth.getAccessToken_asU8()).toString("utf8"));
+        md.set("Authorization", "Bearer " + token);
         cb(null, md);
       })), {});
 
