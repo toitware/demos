@@ -1,4 +1,4 @@
-module github.com/toitware/demos.git/api-list-devices
+module github.com/toitware/demos.git/api/list_devices
 
 go 1.15
 
