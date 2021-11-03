@@ -55,8 +55,9 @@ func connect(ctx context.Context, apiKey string) (*grpc.ClientConn, error) {
 	}
 	return grpc.DialContext(ctx, "api.toit.io:443",
 		grpc.WithKeepaliveParams(keepalive.ClientParameters{
-			Time:    5 * time.Second,
-			Timeout: 2 * time.Second,
+			Time:                10 * time.Second,
+			Timeout:             5 * time.Second,
+			PermitWithoutStream: true,
 		}),
 		grpc.WithTransportCredentials(credentials.NewClientTLSFromCert(pool, "")),
 		grpc.WithPerRPCCredentials(newAPIRPCCredentials(apiKey)),
