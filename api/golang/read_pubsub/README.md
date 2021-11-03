@@ -12,3 +12,5 @@ To run, use:
 ```
 $ TOIT_API_KEY=<api-key-secret> go run ./main.go <topic> <subscription-name>
 ```
+
+To validate that it works you can use `toit pubsub write <topic> Test -- Hello, World!` to write a test message on the topic.

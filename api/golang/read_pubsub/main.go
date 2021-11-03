@@ -42,7 +42,7 @@ func main() {
 	}
 	defer conn.Close()
 
-	if err := readPubSub(ctx, os.Args[0], os.Args[1], conn); err != nil {
+	if err := readPubSub(ctx, os.Args[1], os.Args[2], conn); err != nil {
 		panic(err)
 	}
 }
