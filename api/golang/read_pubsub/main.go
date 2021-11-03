@@ -42,7 +42,7 @@ func main() {
 	}
 	defer conn.Close()
 
-	if err := readPubSub(ctx, os.Args[1], os.Args[2], conn); err != nil {
+	if err := readPubSub(ctx, os.Args[0], os.Args[1], conn); err != nil {
 		panic(err)
 	}
 }
@@ -65,7 +65,9 @@ func readPubSub(ctx context.Context, topic string, name string, conn grpc.Client
 			resp, err := stream.Recv()
 			if err == io.EOF {
 				break
-			} else if err != nil && !isRetryableError(err) {
+			} else if isRetryableError(err) {
+				continue
+			} else if err != nil {
 				return err
 			}
 
@@ -95,8 +97,9 @@ func connect(ctx context.Context, apiKey string) (*grpc.ClientConn, error) {
 	}
 	return grpc.DialContext(ctx, "api.toit.io:443",
 		grpc.WithKeepaliveParams(keepalive.ClientParameters{
-			Time:    5 * time.Second,
-			Timeout: 2 * time.Second,
+			Time:                10 * time.Second,
+			Timeout:             5 * time.Second,
+			PermitWithoutStream: true,
 		}),
 		grpc.WithTransportCredentials(credentials.NewClientTLSFromCert(pool, "")),
 		grpc.WithPerRPCCredentials(newAPIRPCCredentials(apiKey)),
