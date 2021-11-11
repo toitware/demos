@@ -115,5 +115,3 @@ dist
 
 # End of https://www.toptal.com/developers/gitignore/api/node
 /.vs
-/api/csharp/.vs/pubsub-publish
-/api/csharp/pubsub-publish.v3.ncrunchsolution.user

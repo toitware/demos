@@ -10,10 +10,10 @@ namespace toit.demos.api.csharp.pubsubpublish
         private static string apikey = "<apikey>"; // From: https://console.toit.io/project/apikeys
         static async Task Main(string[] args)
         {
-            var callCredentials = CallCredentials.FromInterceptor(async (context, metadata) =>
+            var callCredentials = CallCredentials.FromInterceptor((context, metadata) =>
             {
-                await Task.Delay(100);
                 metadata.Add("Authorization", $"Bearer {apikey}");
+                return Task.CompletedTask;
             });
             var channelCredentials = ChannelCredentials.Create(new SslCredentials(), callCredentials);
             using var channel = GrpcChannel.ForAddress("https://api.toit.io:443", new GrpcChannelOptions
@@ -21,9 +21,9 @@ namespace toit.demos.api.csharp.pubsubpublish
                 Credentials = channelCredentials
             });
 
-            var client = new Toit.Proto.API.PubSub.Publish.PublishClient(channel);
+            var client = new Toit.Api.Pubsub.Publish.PublishClient(channel);
 
-            var request = new Toit.Proto.API.PubSub.PublishRequest
+            var request = new Toit.Api.Pubsub.PublishRequest
             {
                 Topic = "cloud:hello-world",
                 PublisherName = "C#",

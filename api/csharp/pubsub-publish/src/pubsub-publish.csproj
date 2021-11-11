@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="..\..\..\..\..\toitware\proto\toit\api\pubsub\publish.proto" GrpcServices="Client">
+    <Protobuf Include="..\..\..\..\third_party\toit_api\proto\toit\api\pubsub\publish.proto" GrpcServices="Client">
       <Link>Protos\publish.proto</Link>
     </Protobuf>
   </ItemGroup>
