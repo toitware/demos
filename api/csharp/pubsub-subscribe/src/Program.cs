@@ -47,7 +47,6 @@ namespace toit.demos.api.csharp.pubsubsubscribe
                     Console.WriteLine(message.Message.Data.ToStringUtf8());
                     await client.AcknowledgeAsync(new AcknowledgeRequest { Subscription = TopicSubscription, EnvelopeIds = { message.Id } });
                 }
-
             } while (true);
         }
     }
