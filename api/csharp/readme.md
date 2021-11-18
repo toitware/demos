@@ -32,3 +32,8 @@ The key can be created from here:
 
 https://console.toit.io/project/apikeys
 
+
+The subscriber will create a subscription called 'csharp' on the 'cloud:hello-world' topic, to remove this subscription again, run the following cli-command:
+```
+toit pubsub subscription remove cloud:hello-world csharp
+```

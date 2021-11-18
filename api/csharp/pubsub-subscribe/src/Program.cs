@@ -11,7 +11,7 @@ namespace toit.demos.api.csharp.pubsubsubscribe
     {
         private static string apikey = "<apikey>"; // From: https://console.toit.io/project/apikeys
         private static readonly Subscription TopicSubscription = new Subscription { Name = "csharp", Topic = "cloud:hello-world" };
-        
+
         static async Task Main(string[] args)
         {
             var callCredentials = CallCredentials.FromInterceptor((context, metadata) =>
@@ -31,15 +31,16 @@ namespace toit.demos.api.csharp.pubsubsubscribe
             var subscriptions = await client.ListSubscriptionsAsync(new ListSubscriptionsRequest { Topic = TopicSubscription.Topic });
             if (subscriptions.Subscriptions.All(name => name.Name != TopicSubscription.Name))
                 await client.CreateSubscriptionAsync(new CreateSubscriptionRequest { Subscription = TopicSubscription });
-            
+            Console.WriteLine("Press any-key to stop the polling");
             do
             {
                 FetchResponse fetchResponse;
                 do
                 {
                     Console.WriteLine("Polling");
-                    fetchResponse = await client.FetchAsync(new FetchRequest { Subscription = TopicSubscription});
-
+                    fetchResponse = await client.FetchAsync(new FetchRequest { Subscription = TopicSubscription });
+                    if (Console.KeyAvailable)
+                        return;
                 } while (!fetchResponse.Messages.Any());
 
                 foreach (var message in fetchResponse.Messages)
@@ -47,6 +48,8 @@ namespace toit.demos.api.csharp.pubsubsubscribe
                     Console.WriteLine(message.Message.Data.ToStringUtf8());
                     await client.AcknowledgeAsync(new AcknowledgeRequest { Subscription = TopicSubscription, EnvelopeIds = { message.Id } });
                 }
+
+
             } while (true);
         }
     }
