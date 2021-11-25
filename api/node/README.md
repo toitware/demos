@@ -1,9 +1,4 @@
-# Toit API node example
+# Toit API node.js examples
 
-Lists all devices available in the current project.
-
-To run use:
-```
-$ yarn install
-$ ./node_modules/.bin/ts-node main.ts <username> <password>
-``
+  * [List devices](./list_devices)
+  * [PubSub publish](./pubsub_publish)
