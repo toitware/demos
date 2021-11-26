@@ -26,7 +26,7 @@ async function main() {
 
   const devices = await listDevices(channel);
   devices.forEach((d: Device) => {
-    console.log(d.getConfig().getName());
+    console.log(d.getConfig()?.getName());
   });
 }
 
