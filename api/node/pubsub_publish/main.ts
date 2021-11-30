@@ -41,7 +41,7 @@ function publishMessage(credentials: grpc.ChannelCredentials,topic:string, messa
         const req = new PublishRequest();
         req.setTopic(topic);
         req.setPublisherName(os.hostname());
-        req.setDataList([message]);
+        req.setDataList([Buffer.from(message).toString("base64")]);
         client.publish(req, (err, resp) => {
             if (err !== null) {
                 reject(err)
