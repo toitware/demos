@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>pubsubsubscribe</AssemblyName>
+    <RootNamespace>toit.demos.api.csharp.pubsubsubscribe</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.13.0" />
+    <PackageReference Include="Grpc.Net.ClientFactory" Version="2.32.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.32.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="../../../../third_party/toit_api/proto/toit/api/pubsub/subscribe.proto" GrpcServices="Client" AdditionalImportDirs="../../../../third_party/toit_api/proto">
+      <Link>Protos\subscribe.proto</Link>
+    </Protobuf>
+    <Protobuf Include="../../../../third_party/toit_api/proto/toit/model/pubsub/message.proto" GrpcServices="none" AdditionalImportDirs="../../../../third_party/toit_api/proto">
+      <Link>Protos\message.proto</Link>
+    </Protobuf>
+  </ItemGroup>
+</Project>
